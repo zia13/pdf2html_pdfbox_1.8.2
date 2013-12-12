@@ -53,12 +53,6 @@ public class ListExtraction
     {
       this.htmlFile = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(outputFileName), "UTF8"));
       String header = "<html><head><meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\"/><title>Html file</title><link rel=\"stylesheet\" href=\"css/style.css\" /></head><body>";
-      
-
-
-
-
-
       this.htmlFile.write(header);
       this.type = type;
       this.zoom = zoom;
@@ -111,7 +105,9 @@ public class ListExtraction
       
       String fontString = "";
       PDFont font = text.getFont();
+      
       PDFontDescriptor fontDescriptor = font.getFontDescriptor();
+      
       if (fontDescriptor != null) {
         fontString = fontDescriptor.getFontName();
       } else {

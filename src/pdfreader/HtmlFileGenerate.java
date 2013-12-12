@@ -381,7 +381,7 @@ public class HtmlFileGenerate
     }
     try
     {
-      sb = ETBC.getTableWithAllCellsSpan(this.pdfPath, currentPage, ColumnWiseRect, rectangle, cellSpan, numberofRows, numberofColumns);
+      sb = ETBC.getTableWithAllCellsSpan(ColumnWiseRect, rectangle, cellSpan, numberofRows, numberofColumns);
     }
     catch (IOException ex)
     {
@@ -430,7 +430,7 @@ public class HtmlFileGenerate
     }
     try
     {
-      ETBC.ExtractTextByArea1(pdfFile, ColumnWiseRect, currentPage, numberofRows, 1);
+      ETBC.ExtractTextByAreaForList(pdfFile, ColumnWiseRect, currentPage, numberofRows, 1);
     }
     catch (IOException ex)
     {

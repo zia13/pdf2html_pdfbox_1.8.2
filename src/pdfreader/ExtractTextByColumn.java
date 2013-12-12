@@ -245,7 +245,7 @@ public class ExtractTextByColumn
     return sb;
   }
   
-  public StringBuffer getTableWithAllCellsSpan(String pdfFile, int pageNumber, Rectangle[][] ColumnWiseRect, Rectangle wholeRectangle, int[][] cellSpan, int numberofRows, int numberOfColumns)
+  public StringBuffer getTableWithAllCellsSpan(Rectangle[][] ColumnWiseRect, Rectangle wholeRectangle, int[][] cellSpan, int numberofRows, int numberOfColumns)
     throws IOException, CryptographyException
   {
     for (int i = 0; i < numberofRows; i++) {
@@ -256,10 +256,10 @@ public class ExtractTextByColumn
     int[] indentetionLocal = findAllignment(numberofRows, numberOfColumns - 1);
     StringBuffer sb = new StringBuffer();
     
-    sb.append("<table style=\"border-collapse:collapse; border:0; width:90%; margin-left:").append(wholeRectangle.x).append(";\">");
+    sb.append("<table style=\"border-collapse:collapse; border:0; width:95%; margin-left:").append(wholeRectangle.x).append(";\">");
     String tableHeader = "<tr height = \"2px\">";
     for (int i = 0; i < numberOfColumns - 1; i++) {
-      tableHeader = tableHeader.concat("<th width = \"" + Math.ceil(ColumnWiseRect[0][i].width * 90 / wholeRectangle.width) + "%\"></th>");
+      tableHeader = tableHeader.concat("<th width = \"" + Math.ceil(ColumnWiseRect[0][i].width * 95 / wholeRectangle.width) + "%\"></th>");
     }
     tableHeader = tableHeader.concat("</tr>");
     sb.append(tableHeader);
@@ -417,7 +417,7 @@ public class ExtractTextByColumn
     throws IOException, CryptographyException
   {
     StringBuffer sb = new StringBuffer();
-    sb.append("<table style=\"border-collapse:collapse;\" border = \"0\" width = \"100%\">");
+    sb.append("<table style=\"border-collapse:collapse; border = \"0\" width = \"100%\">");
     for (int i = 0; i < numberofRows; i++) {
       if (getFirstSignificantChar(this.allCellsList[i][0], true) != null)
       {
@@ -475,23 +475,6 @@ public class ExtractTextByColumn
   public void getListRow(List<TextPosition> rowOfList)
   {
     this.tempForParagraph = new StringBuffer();
-    
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     this.lastIsBold = false;
     this.lastIsItalic = false;
     for (int i = 0; i < rowOfList.size(); i++)
@@ -511,11 +494,11 @@ public class ExtractTextByColumn
     }
   }
   
-  public StringBuffer getListWithAllCellSpan(String pdfFile, int pageNumber, Rectangle[] ColumnWiseRect, Rectangle wholeRectangle, int[][] cellSpan, int numberofRows, int numberOfColumns)
+  public StringBuffer getListWithAllCellSpan(Rectangle[][] ColumnWiseRect, Rectangle wholeRectangle, int[][] cellSpan, int numberofRows, int numberOfColumns)
     throws IOException, CryptographyException
   {
     StringBuffer sb = new StringBuffer();
-    sb.append("<table style=\"border-collapse:collapse;\" border = \"0\" width = \"100%\">");
+    sb.append("<table style=\"border-collapse:collapse; border :0; width :100%;\">");
     for (int i = 0; i < numberofRows; i++) {
       if (getFirstSignificantChar(this.allCellsList[i][0], true) != null)
       {
@@ -566,6 +549,65 @@ public class ExtractTextByColumn
     sb.append("</p></td></tr></table>");
     return sb;
   }
+  
+  public StringBuffer getListWithAllCellSpan1(Rectangle[][] ColumnWiseRect, Rectangle wholeRectangle, int[][] cellSpan, int numberofRows, int numberOfColumns)
+    throws IOException, CryptographyException
+  {
+    StringBuffer sb = new StringBuffer();
+    sb.append("<table style=\"border-collapse:collapse; border :0; width :100%;\">");
+    for (int i = 0; i < numberofRows; i++) {
+        for(int j = 0; j<2; j++){
+      if (getFirstSignificantChar(this.allCellsList[i][j], true) != null)
+      {
+        this.tableData[i][j] = this.tableData[i][j].trim();
+        String cellInHex = HexStringConverter.getHexStringConverterInstance().stringToHex(getFirstSignificantChar(this.allCellsList[i][j], true).getCharacter());
+        String singleCharacter = symbolCheck(cellInHex, getFirstSignificantChar(this.allCellsList[i][j], true));
+        if (i == 0)
+        {
+          if (matchPattern(this.tableData[i][j]))
+          {
+            if (positionCheck(getFirstSignificantChar(this.allCellsList[i][j], true).getX())) {
+              this.listOfDifferentPositionOfTD.add(Float.valueOf(getFirstSignificantChar(this.allCellsList[i][j], true).getX()));
+            }
+            sb.append("<tr><td valign =\"top\"><p style=\"padding-left: ").append(getFirstSignificantChar(this.allCellsList[i][j], true).getX()).append("px\">").append(this.tableData[i][j].substring(this.start, this.end)).append("</td><td>").append(this.tableData[i][j].substring(this.end));
+          }
+          else if (this.isSymbol)
+          {
+            if (positionCheck(getFirstSignificantChar(this.allCellsList[i][j], true).getX())) {
+              this.listOfDifferentPositionOfTD.add(Float.valueOf(getFirstSignificantChar(this.allCellsList[i][j], true).getX()));
+            }
+            sb.append("<tr><td valign =\"top\"><p style=\"padding-left: ").append(getFirstSignificantChar(this.allCellsList[i][j], true).getX()).append("px\">").append(singleCharacter).append("</td><td>").append(this.tableData[i][j].substring(this.foundCharAt + 1));
+          }
+          else
+          {
+            sb.append(this.tableData[i][j]);
+          }
+        }
+        else if (matchPattern(this.tableData[i][j]))
+        {
+          if (positionCheck(getFirstSignificantChar(this.allCellsList[i][j], true).getX())) {
+            this.listOfDifferentPositionOfTD.add(Float.valueOf(getFirstSignificantChar(this.allCellsList[i][j], true).getX()));
+          }
+          sb.append("</p></td></tr><tr><td valign =\"top\"><p style=\"padding-left: ").append(getFirstSignificantChar(this.allCellsList[i][j], true).getX()).append("px\">").append(this.tableData[i][j].substring(this.start, this.end)).append("</td><td>").append(this.tableData[i][j].substring(this.end));
+        }
+        else if (this.isSymbol)
+        {
+          if (positionCheck(getFirstSignificantChar(this.allCellsList[i][j], true).getX())) {
+            this.listOfDifferentPositionOfTD.add(Float.valueOf(getFirstSignificantChar(this.allCellsList[i][j], true).getX()));
+          }
+          sb.append("</p></td></tr><tr><td valign =\"top\"><p style=\"padding-left: ").append(getFirstSignificantChar(this.allCellsList[i][j], true).getX()).append("px\">").append(singleCharacter).append("</td><td>").append(this.tableData[i][j].substring(this.foundCharAt + 1));
+        }
+        else
+        {
+          sb.append(this.tableData[i][j]);
+        }
+      }
+    }
+    }
+    sb.append("</p></td></tr></table>");
+    return sb;
+  }
+  
   
   private boolean positionCheck(float currentPosition)
   {
@@ -752,7 +794,46 @@ public class ExtractTextByColumn
     }
   }
   
-  public void ExtractTextByArea1(String filename, Rectangle[] rect, int pageNumber, int numberOfRows, int numberOfColumns)
+  public void ExtractTextByAreaForListRowColumn(Rectangle[][] rect, int numberOfRows, int numberOfColumns)
+    throws IOException, CryptographyException
+  {
+    this.rectangles = rect;
+    try
+    {
+      for (int row = 0; row < numberOfRows; row++) {
+        for (int column = 0; column < numberOfColumns; column++)
+        {
+          String className = "class" + row + "-" + column;
+          this.stripper.addRegion(className, rect[row][column]);
+        }
+      }
+      this.stripper.extractRegions(this.firstPage);
+      for (int row = 0; row < numberOfRows; row++) {
+        for (int column = 0; column < numberOfColumns; column++)
+        {
+          String className = "class" + row + "-" + column;
+          List TextinArea1 = (List)this.stripper.regionCharacterList.get(className);
+          List<TextPosition> lis = (List)TextinArea1.get(0);
+          this.allCellsList[row][column] = lis;
+          
+          getTextWithBoldItalicProp(lis);
+          this.tableData[row][column] = replaceAllWeiredChars(this.tempForParagraph).toString();
+          this.leftLetter[row][column] = getFirstSignificantChar(lis, false);
+          this.rightLetter[row][column] = getLastSignificantChar(lis, false);
+        }
+      }
+        System.out.println("");
+    }
+    finally
+    {
+      if (this.document != null) {
+        this.document.close();
+      }
+    }
+  }
+  
+  
+  public void ExtractTextByAreaForList(String filename, Rectangle[] rect, int pageNumber, int numberOfRows, int numberOfColumns)
     throws IOException, CryptographyException
   {
     PDDocument document = null;
@@ -781,9 +862,7 @@ public class ExtractTextByColumn
         List TextinArea1 = (List)strip.regionCharacterList.get("class" + row);
         List<TextPosition> li = (List)TextinArea1.get(0);
         this.allCellsList[row][0] = li;
-        
-        this.tableData[row][0] = strip.getTextForRegion("class" + row);
-        
+        this.tableData[row][0] = strip.getTextForRegion("class" + row);        
         this.leftLetter[row][0] = getFirstSignificantChar(li, false);
         this.rightLetter[row][0] = getLastSignificantChar(li, false);
       }

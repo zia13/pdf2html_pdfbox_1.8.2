@@ -105,7 +105,7 @@ public class HtmlFileGen
     {
       try
       {
-        htmlContent = getListSinglePixel(this.pdfPath, rec, pageNumber);
+        htmlContent = getListSinglePixelRowColumn(this.pdfPath, rec, pageNumber);
       }
       catch (CryptographyException ex)
       {
@@ -216,7 +216,7 @@ public class HtmlFileGen
     }
     try
     {
-      sb = ETBC.getTableWithAllCellsSpan(this.pdfPath, currentPage, ColumnWiseRect, rectangle, cellSpan, numberofRows, numberofColumns);
+      sb = ETBC.getTableWithAllCellsSpan(ColumnWiseRect, rectangle, cellSpan, numberofRows, numberofColumns);
     }
     catch (IOException ex)
     {
@@ -235,9 +235,8 @@ public class HtmlFileGen
     return stringBuffer;
   }
   
-  public StringBuffer getListSinglePixel(String pdfFile, Rectangle rectangle, int currentPage)
-    throws CryptographyException
-  {
+  public StringBuffer getListSinglePixelRow(String pdfFile, Rectangle rectangle, int currentPage)
+    throws CryptographyException{
     StringBuffer sb = null;
     ExtractTextByAreaSinglePixel ETB = new ExtractTextByAreaSinglePixel();
     try
@@ -264,7 +263,7 @@ public class HtmlFileGen
     }
     try
     {
-      ETBC.ExtractTextByArea1(pdfFile, ColumnWiseRect, currentPage, numberofRows, 1);
+      ETBC.ExtractTextByAreaForList(pdfFile, ColumnWiseRect, currentPage, numberofRows, 1);
     }
     catch (IOException ex)
     {
@@ -281,6 +280,66 @@ public class HtmlFileGen
     sb = replaceAllWeiredChars(sb);
     return sb;
   }
+  
+  public StringBuffer getListSinglePixelRowColumn(String pdfFile, Rectangle rectangle, int currentPage)
+    throws CryptographyException{
+    StringBuffer sb = null;
+    int[] regiooon = null;
+    int[] regioon = new int[3];
+    int dividedRegionWidth = 1;
+    ExtractTextByAreaSinglePixel ETB = new ExtractTextByAreaSinglePixel();
+    try
+    {
+      regiooon = ETB.extractTextByArea(pdfFile, rectangle, currentPage, 0);
+    }
+    catch (IOException ex)
+    {
+      Logger.getLogger(HtmlFileGenerate.class.getName()).log(Level.SEVERE, null, ex);
+    }
+          
+    regioon[0] = regiooon[0];
+    regioon[1] = regiooon[1];
+    regioon[2] = rectangle.x+rectangle.width;
+    int[] positionOfRowStart = ETB.getPointOfRowStart();
+    int numberofRows = ETB.returnNumberofRows();
+    int numberofColumns = ETB.returnNumberofColumns();
+    
+    ExtractTextByColumn ETBC = new ExtractTextByColumn(this.pdfPath, currentPage);
+    Rectangle[][] ColumnWiseRect = new Rectangle[numberofRows][numberofColumns - 1];
+    int[][] cellSpan = new int[numberofRows][numberofColumns];
+    for (int row = 0; row < numberofRows; row++) {
+      for (int column = 0; column < 3 - 1; column++) {
+        if ((column == 0) && (row == 0)) {
+          ColumnWiseRect[row][column] = new Rectangle(rectangle.x, rectangle.y, regioon[(column + 1)] * dividedRegionWidth - rectangle.x, positionOfRowStart[row] - rectangle.y);
+        } else if ((column > 0) && (row == 0)) {
+          ColumnWiseRect[row][column] = new Rectangle(regioon[column] * dividedRegionWidth, rectangle.y, regioon[(column + 1)] * dividedRegionWidth - regioon[column] * dividedRegionWidth, positionOfRowStart[row] - rectangle.y);
+        } else if ((column == 0) && (row > 0)) {
+          ColumnWiseRect[row][column] = new Rectangle(rectangle.x, positionOfRowStart[(row - 1)], regioon[(column + 1)] * dividedRegionWidth - rectangle.x, positionOfRowStart[row] - positionOfRowStart[(row - 1)]);
+        } else if ((column > 0) && (row > 0)) {
+          ColumnWiseRect[row][column] = new Rectangle(regioon[column] * dividedRegionWidth, positionOfRowStart[(row - 1)], regioon[(column + 1)] * dividedRegionWidth - regioon[column] * dividedRegionWidth, positionOfRowStart[row] - positionOfRowStart[(row - 1)]);
+        }
+      }
+    }
+    try
+    {
+      ETBC.ExtractTextByAreaForListRowColumn(ColumnWiseRect, numberofRows, 2);
+    }
+    catch (IOException ex)
+    {
+      Logger.getLogger(HtmlFileGenerate.class.getName()).log(Level.SEVERE, null, ex);
+    }
+    try
+    {
+      sb = ETBC.getListWithAllCellSpan1(ColumnWiseRect, rectangle, cellSpan, numberofRows, 3);
+    }
+    catch (IOException ex)
+    {
+      Logger.getLogger(HtmlFileGenerate.class.getName()).log(Level.SEVERE, null, ex);
+    }
+    sb = replaceAllWeiredChars(sb);
+    return sb;
+  }
+  
   
   public TextPosition getLastSignificantChar(List<TextPosition>[][] cellText, int rowPos, int columnPos)
   {

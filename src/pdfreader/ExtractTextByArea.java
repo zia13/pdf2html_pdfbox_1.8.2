@@ -2,15 +2,12 @@ package pdfreader;
 
 import java.awt.Rectangle;
 import java.io.IOException;
-import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Vector;
 import org.apache.pdfbox.exceptions.CryptographyException;
 import org.apache.pdfbox.exceptions.InvalidPasswordException;
 import org.apache.pdfbox.pdmodel.PDDocument;
-import org.apache.pdfbox.pdmodel.PDDocumentCatalog;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.util.PDFTextStripperByArea;
 import org.apache.pdfbox.util.TextPosition;
@@ -110,16 +107,22 @@ public class ExtractTextByArea
           System.exit(1);
         }
       }
-      PDFTextStripperByArea stripper = new PDFTextStripperByArea();
-      stripper.setSortByPosition(true);
-      stripper.addRegion("class1", rect);
-      List allPages = document.getDocumentCatalog().getAllPages();
-      PDPage firstPage = (PDPage)allPages.get(pageNumber);
-      stripper.extractRegions(firstPage);
-      
-      Vector TextinArea1 = (Vector)stripper.regionCharacterList.get("class1");
-      
 
+        PDFTextStripperByArea stripper = new PDFTextStripperByArea();
+        stripper.setSortByPosition(true);
+        stripper.addRegion("class1", rect);
+        List allPages = document.getDocumentCatalog().getAllPages();
+        PDPage firstPage = (PDPage)allPages.get(pageNumber);
+//        PDFStreamEngine engine = new PDFStreamEngine(ResourceLoader.loadProperties("org/apache/pdfbox/resources/PageDrawer.properties",true));
+//        engine.processStream(firstPage, firstPage.findResources(), firstPage.getContents().getStream());
+//        PDGraphicsState graphicState = engine.getGraphicsState();
+//        System.out.println("Graphics Color: "+graphicState.getStrokingColor().getColorSpace().getName());
+//        float colorSpaceValues[] = graphicState.getStrokingColor().getColorSpaceValue();
+//        for (float c : colorSpaceValues) {
+//            System.out.println("Graphics Color: "+c * 255);
+//        }      
+      stripper.extractRegions(firstPage);      
+      Vector TextinArea1 = (Vector)stripper.regionCharacterList.get("class1");      
       TextinArea = (List)TextinArea1.get(0);
     }
     finally
