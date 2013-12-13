@@ -554,55 +554,64 @@ public class ExtractTextByColumn
     throws IOException, CryptographyException
   {
     StringBuffer sb = new StringBuffer();
-    sb.append("<table style=\"border-collapse:collapse; border :0; width :100%;\">");
+    sb.append("<table style=\"border-collapse:collapse; border :0px; width :100%;\">");
     for (int i = 0; i < numberofRows; i++) {
+//        sb.append("<tr>");
         for(int j = 0; j<2; j++){
-      if (getFirstSignificantChar(this.allCellsList[i][j], true) != null)
-      {
-        this.tableData[i][j] = this.tableData[i][j].trim();
-        String cellInHex = HexStringConverter.getHexStringConverterInstance().stringToHex(getFirstSignificantChar(this.allCellsList[i][j], true).getCharacter());
-        String singleCharacter = symbolCheck(cellInHex, getFirstSignificantChar(this.allCellsList[i][j], true));
-        if (i == 0)
-        {
-          if (matchPattern(this.tableData[i][j]))
-          {
-            if (positionCheck(getFirstSignificantChar(this.allCellsList[i][j], true).getX())) {
-              this.listOfDifferentPositionOfTD.add(Float.valueOf(getFirstSignificantChar(this.allCellsList[i][j], true).getX()));
-            }
-            sb.append("<tr><td valign =\"top\"><p style=\"padding-left: ").append(getFirstSignificantChar(this.allCellsList[i][j], true).getX()).append("px\">").append(this.tableData[i][j].substring(this.start, this.end)).append("</td><td>").append(this.tableData[i][j].substring(this.end));
-          }
-          else if (this.isSymbol)
-          {
-            if (positionCheck(getFirstSignificantChar(this.allCellsList[i][j], true).getX())) {
-              this.listOfDifferentPositionOfTD.add(Float.valueOf(getFirstSignificantChar(this.allCellsList[i][j], true).getX()));
-            }
-            sb.append("<tr><td valign =\"top\"><p style=\"padding-left: ").append(getFirstSignificantChar(this.allCellsList[i][j], true).getX()).append("px\">").append(singleCharacter).append("</td><td>").append(this.tableData[i][j].substring(this.foundCharAt + 1));
-          }
-          else
-          {
-            sb.append(this.tableData[i][j]);
-          }
+            //        //<editor-fold defaultstate="collapsed" desc="comment">
+//      if (getFirstSignificantChar(this.allCellsList[i][j], true) != null)
+//      {
+//        this.tableData[i][j] = this.tableData[i][j].trim();
+//        String cellInHex = HexStringConverter.getHexStringConverterInstance().stringToHex(getFirstSignificantChar(this.allCellsList[i][j], true).getCharacter());
+//        String singleCharacter = symbolCheck(cellInHex, getFirstSignificantChar(this.allCellsList[i][j], true));
+        
+       // if (i == 0)
+            //        {
+            //          if (matchPattern(this.tableData[i][j]))
+            //          {
+            //            if (positionCheck(getFirstSignificantChar(this.allCellsList[i][j], true).getX())) {
+            //              this.listOfDifferentPositionOfTD.add(Float.valueOf(getFirstSignificantChar(this.allCellsList[i][j], true).getX()));
+            //            }
+            //            sb.append("<tr><td valign =\"top\"><p style=\"padding-left: ").append(getFirstSignificantChar(this.allCellsList[i][j], true).getX()).append("px\">").append(this.tableData[i][j].substring(this.start, this.end)).append("</td><td>").append(this.tableData[i][j].substring(this.end));
+            //          }
+            //          else if (this.isSymbol)
+            //          {
+            //            if (positionCheck(getFirstSignificantChar(this.allCellsList[i][j], true).getX())) {
+            //              this.listOfDifferentPositionOfTD.add(Float.valueOf(getFirstSignificantChar(this.allCellsList[i][j], true).getX()));
+            //            }
+            //            sb.append("<tr><td valign =\"top\"><p style=\"padding-left: ").append(getFirstSignificantChar(this.allCellsList[i][j], true).getX()).append("px\">").append(singleCharacter).append("</td><td>").append(this.tableData[i][j].substring(this.foundCharAt + 1));
+            //          }
+            //          else
+            //          {
+            //            sb.append(this.tableData[i][j]);
+            //          }
+            //        }
+            //        else if (matchPattern(this.tableData[i][j]))
+            //        {
+            //          if (positionCheck(getFirstSignificantChar(this.allCellsList[i][j], true).getX())) {
+            //            this.listOfDifferentPositionOfTD.add(Float.valueOf(getFirstSignificantChar(this.allCellsList[i][j], true).getX()));
+            //          }
+            //          sb.append("</p></td></tr><tr><td valign =\"top\"><p style=\"padding-left: ").append(getFirstSignificantChar(this.allCellsList[i][j], true).getX()).append("px\">").append(this.tableData[i][j].substring(this.start, this.end)).append("</td><td>").append(this.tableData[i][j].substring(this.end));
+            //        }
+            //        else if (this.isSymbol)
+            //        {
+            //          if (positionCheck(getFirstSignificantChar(this.allCellsList[i][j], true).getX())) {
+            //            this.listOfDifferentPositionOfTD.add(Float.valueOf(getFirstSignificantChar(this.allCellsList[i][j], true).getX()));
+            //          }
+            //          sb.append("</p></td></tr><tr><td valign =\"top\"><p style=\"padding-left: ").append(getFirstSignificantChar(this.allCellsList[i][j], true).getX()).append("px\">").append(singleCharacter).append("</td><td>").append(this.tableData[i][j].substring(this.foundCharAt + 1));
+            //        }
+            //        else
+            //        {
+            //          sb.append(this.tableData[i][j]);
+            //        }
+            //      }
+            //</editor-fold>
+            if(i==0 && j==0 && !"".equals(tableData[i][j]))                
+                sb.append("<tr><td>").append(tableData[i][j]).append("</td>");
+            else if(j==0 && !"".equals(tableData[i][j]))                
+                sb.append("</td></tr><tr><td>").append(tableData[i][j]).append("</td>");            
         }
-        else if (matchPattern(this.tableData[i][j]))
-        {
-          if (positionCheck(getFirstSignificantChar(this.allCellsList[i][j], true).getX())) {
-            this.listOfDifferentPositionOfTD.add(Float.valueOf(getFirstSignificantChar(this.allCellsList[i][j], true).getX()));
-          }
-          sb.append("</p></td></tr><tr><td valign =\"top\"><p style=\"padding-left: ").append(getFirstSignificantChar(this.allCellsList[i][j], true).getX()).append("px\">").append(this.tableData[i][j].substring(this.start, this.end)).append("</td><td>").append(this.tableData[i][j].substring(this.end));
-        }
-        else if (this.isSymbol)
-        {
-          if (positionCheck(getFirstSignificantChar(this.allCellsList[i][j], true).getX())) {
-            this.listOfDifferentPositionOfTD.add(Float.valueOf(getFirstSignificantChar(this.allCellsList[i][j], true).getX()));
-          }
-          sb.append("</p></td></tr><tr><td valign =\"top\"><p style=\"padding-left: ").append(getFirstSignificantChar(this.allCellsList[i][j], true).getX()).append("px\">").append(singleCharacter).append("</td><td>").append(this.tableData[i][j].substring(this.foundCharAt + 1));
-        }
-        else
-        {
-          sb.append(this.tableData[i][j]);
-        }
-      }
-    }
+        sb.append("</tr>");
     }
     sb.append("</p></td></tr></table>");
     return sb;
@@ -815,7 +824,7 @@ public class ExtractTextByColumn
           List TextinArea1 = (List)this.stripper.regionCharacterList.get(className);
           List<TextPosition> lis = (List)TextinArea1.get(0);
           this.allCellsList[row][column] = lis;
-          
+          System.out.println("Row: "+row+"Column: "+column+"; Text: "+lis.toString());
           getTextWithBoldItalicProp(lis);
           this.tableData[row][column] = replaceAllWeiredChars(this.tempForParagraph).toString();
           this.leftLetter[row][column] = getFirstSignificantChar(lis, false);
