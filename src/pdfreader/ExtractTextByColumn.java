@@ -38,7 +38,7 @@ public class ExtractTextByColumn
   List<TextPosition> li;
   int foundCharAt;
   boolean isSymbol;
-  String regex = "[(a-zA-Z0-9]+[ ]+[.)]";
+  String regex = "[(a-zA-Z0-9]+[.)]";   
   String numberPattern = "^\\$?([0-9]{1,3},([0-9]{3},)*[0-9]{3}|[0-9]+)(.[0-9][0-9])?$";
   Pattern pattern = Pattern.compile(this.regex);
   Matcher matcher;
@@ -554,7 +554,8 @@ public class ExtractTextByColumn
     throws IOException, CryptographyException
   {
     StringBuffer sb = new StringBuffer();
-    sb.append("<table style=\"border-collapse:collapse; border :0px; width :100%;\">");
+    sb.append("<table border = \"1px\" style=\"border-collapse:collapse; border :black; border-width: 1px; width :100%;\">");
+    List<TextPosition> tempList =new ArrayList<>();
     for (int i = 0; i < numberofRows; i++) {
 //        sb.append("<tr>");
         for(int j = 0; j<2; j++){
@@ -606,14 +607,40 @@ public class ExtractTextByColumn
             //        }
             //      }
             //</editor-fold>
-            if(i==0 && j==0 && !"".equals(tableData[i][j]))                
-                sb.append("<tr><td>").append(tableData[i][j]).append("</td>");
-            else if(j==0 && !"".equals(tableData[i][j]))                
-                sb.append("</td></tr><tr><td>").append(tableData[i][j]).append("</td>");            
+            if(i==0 && j==0)                
+            {
+                getTextWithBoldItalicProp(allCellsList[i][j]);
+                sb.append("<tr><td style=\"vertical-align: top;\">").append(replaceAllWeiredChars(this.tempForParagraph).toString()).append("</td>");
+            }
+            else if(i==0 && j>0 )                
+            {
+                sb.append("<td style=\"vertical-align: top;\">");
+                tempList.addAll(allCellsList[i][j]);
+            }//.append(tableData[i][j]);
+            else if(j==0 && !"".equals(tableData[i][j]) && tableData[i][j]!="")                
+            {
+                getTextWithBoldItalicProp(tempList);
+                tempList = new ArrayList<>();
+                sb.append(replaceAllWeiredChars(this.tempForParagraph).toString()).append("</td></tr><tr><td style=\"vertical-align: top;\">").append(tableData[i][j]).append("</td><td style=\"vertical-align: top;\">");
+            }
+            else
+            {
+                if(j>0 && matchPattern(tableData[i][j]))
+                {
+                    getTextWithBoldItalicProp(tempList);
+                    tempList = new ArrayList<>();
+                    tempList.addAll(allCellsList[i][j]);
+                    sb.append(replaceAllWeiredChars(this.tempForParagraph).toString()).append("</br>");
+                }
+                else
+                    tempList.addAll(allCellsList[i][j]);
+//                sb.append(tableData[i][j]);
+            }
         }
-        sb.append("</tr>");
+//        sb.append("</tr>");
     }
-    sb.append("</p></td></tr></table>");
+    getTextWithBoldItalicProp(tempList);
+    sb.append(replaceAllWeiredChars(this.tempForParagraph).toString()).append("</td></tr></table>");
     return sb;
   }
   
@@ -632,14 +659,14 @@ public class ExtractTextByColumn
   private boolean matchPattern(String texts)
   {
     this.matcher = this.pattern.matcher(texts);
-    try
-    {
-      this.matcher = this.matcher.region(0, 10);
-    }
-    catch (Exception ex)
-    {
-      return false;
-    }
+//    try
+//    {
+//      this.matcher = this.matcher.region(0, 10);
+//    }
+//    catch (Exception ex)
+//    {
+//      return false;
+//    }
     if (this.matcher.find())
     {
       this.start = this.matcher.start();
@@ -825,8 +852,8 @@ public class ExtractTextByColumn
           List<TextPosition> lis = (List)TextinArea1.get(0);
           this.allCellsList[row][column] = lis;
           System.out.println("Row: "+row+"Column: "+column+"; Text: "+lis.toString());
-          getTextWithBoldItalicProp(lis);
-          this.tableData[row][column] = replaceAllWeiredChars(this.tempForParagraph).toString();
+//          getTextWithBoldItalicProp(lis);
+          this.tableData[row][column] = listToString(lis); //replaceAllWeiredChars(this.tempForParagraph).toString();
           this.leftLetter[row][column] = getFirstSignificantChar(lis, false);
           this.rightLetter[row][column] = getLastSignificantChar(lis, false);
         }
@@ -935,6 +962,16 @@ public class ExtractTextByColumn
     getTextWithBoldItalicProp(this.li);
     String region = replaceAllWeiredChars(this.tempForParagraph).toString();
     return region;
+  }
+  
+  private String listToString(List<TextPosition> list)
+  {
+      String listAsString="";
+      for(int i= 0;i<list.size();i++)
+      {
+          listAsString = listAsString+list.get(i).getCharacter();
+      }
+      return listAsString;
   }
   
   private void getTextWithBoldItalicProp(List<TextPosition> lis)
@@ -1052,6 +1089,56 @@ public class ExtractTextByColumn
         else if(charInDecimal == 61623)
         {
             this.tempForParagraph.append("&bull").append(";");
+        }
+        else if(charInDecimal == 61485)
+        {
+            this.tempForParagraph.append("&ndash").append(";");
+        }
+         else if(charInDecimal == 61607)
+        {
+            this.tempForParagraph.append("&#9632").append(";");
+        }
+        else
+        {
+            this.tempForParagraph.append("&#").append(charInDecimal).append(";");
+        }
+    } else if (charInDecimal != 0) {
+      if (charInDecimal == 38) {
+        this.tempForParagraph.append("&#38;");
+      } else if (charInDecimal == 16) {
+        this.tempForParagraph.append("&#8211;");
+      } else if (charInDecimal == 3) {
+        this.tempForParagraph.append("&#32;");
+      } else if (charInDecimal == 167) {
+      }else {
+        this.tempForParagraph.append(text.getCharacter().replace("<", "&lt;").replace(">", "&gt;"));
+      }
+    }
+  }
+  
+  public void replaceSingleCharacter(TextPosition text)
+  {
+    int charInDecimal = text.getCharacter().toCharArray()[0];
+    if (charInDecimal > 255) {
+        if(charInDecimal == 8213)
+        {
+            this.tempForParagraph.append("&#").append(8220).append(";");
+        }
+        else if(charInDecimal == 8214)
+        {
+            this.tempForParagraph.append("&#").append(8221).append(";");
+        }
+        else if(charInDecimal == 61623)
+        {
+            this.tempForParagraph.append("&bull").append(";");
+        }
+        else if(charInDecimal == 61485)
+        {
+            this.tempForParagraph.append("&ndash").append(";");
+        }
+         else if(charInDecimal == 61607)
+        {
+            this.tempForParagraph.append("&#9632").append(";");
         }
         else
         {
