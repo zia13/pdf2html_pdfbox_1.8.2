@@ -256,7 +256,7 @@ public class ExtractTextByColumn
     int[] indentetionLocal = findAllignment(numberofRows, numberOfColumns - 1);
     StringBuffer sb = new StringBuffer();
     
-    sb.append("<table style=\"border-collapse:collapse; border:0; width:95%; margin-left:").append(wholeRectangle.x).append(";\">");
+    sb.append("<table style=\"border-collapse:collapse; border:0; width:100%; margin-left:").append(wholeRectangle.x).append(";\">");
     String tableHeader = "<tr height = \"2px\">";
     for (int i = 0; i < numberOfColumns - 1; i++) {
       tableHeader = tableHeader.concat("<th width = \"" + Math.ceil(ColumnWiseRect[0][i].width * 95 / wholeRectangle.width) + "%\"></th>");
@@ -554,7 +554,8 @@ public class ExtractTextByColumn
     throws IOException, CryptographyException
   {
     StringBuffer sb = new StringBuffer();
-    sb.append("<table border = \"1px\" style=\"border-collapse:collapse; border :black; border-width: 1px; width :100%;\">");
+    
+    sb.append("<table border = \"0px\" style=\"border-collapse:collapse; border :black; border-width: 1px; width :100%;margin-left:").append(wholeRectangle.x).append(";\">");
     List<TextPosition> tempList =new ArrayList<>();
     for (int i = 0; i < numberofRows; i++) {
 //        sb.append("<tr>");
@@ -619,18 +620,34 @@ public class ExtractTextByColumn
             }//.append(tableData[i][j]);
             else if(j==0 && !"".equals(tableData[i][j]) && tableData[i][j]!="")                
             {
-                getTextWithBoldItalicProp(tempList);
+                getTextWithBoldItalicPropForMultilayerList(tempList);
                 tempList = new ArrayList<>();
-                sb.append(replaceAllWeiredChars(this.tempForParagraph).toString()).append("</td></tr><tr><td style=\"vertical-align: top;\">").append(tableData[i][j]).append("</td><td style=\"vertical-align: top;\">");
+                sb.append(replaceAllWeiredChars(this.tempForParagraph).toString()).append("</td></tr><tr><td style=\"vertical-align: top;\">");
+                getTextWithBoldItalicProp(allCellsList[i][j]);
+                sb.append(replaceAllWeiredChars(this.tempForParagraph).toString()).append("</td><td style=\"vertical-align: top;\">");
             }
-            else
+            else 
             {
+                if(j>0 && getFirstSignificantChar(this.allCellsList[i][j], true) != null)
+                {
+                    String cellInHex = HexStringConverter.getHexStringConverterInstance().stringToHex(getFirstSignificantChar(this.allCellsList[i][j], true).getCharacter());                    
+//                    System.out.println("Symbol: "+getFirstSignificantChar(this.allCellsList[i][j], true).getCharacter()+"; cellInHex: "+cellInHex);
+                    this.isSymbol = false;
+                    String singleCharacter = symbolCheck(cellInHex, getFirstSignificantChar(this.allCellsList[i][j], true));
+                }
                 if(j>0 && matchPattern(tableData[i][j]))
                 {
-                    getTextWithBoldItalicProp(tempList);
+                    getTextWithBoldItalicPropForMultilayerList(tempList);
                     tempList = new ArrayList<>();
                     tempList.addAll(allCellsList[i][j]);
-                    sb.append(replaceAllWeiredChars(this.tempForParagraph).toString()).append("</br>");
+                    sb.append(replaceAllWeiredChars(this.tempForParagraph).toString());
+                }
+                else if(j>0 && isSymbol)
+                {
+                    getTextWithBoldItalicPropForMultilayerList(tempList);
+                    tempList = new ArrayList<>();
+                    tempList.addAll(allCellsList[i][j]);
+                    sb.append(replaceAllWeiredChars(this.tempForParagraph).toString());
                 }
                 else
                     tempList.addAll(allCellsList[i][j]);
@@ -639,7 +656,7 @@ public class ExtractTextByColumn
         }
 //        sb.append("</tr>");
     }
-    getTextWithBoldItalicProp(tempList);
+    getTextWithBoldItalicPropForMultilayerList(tempList);
     sb.append(replaceAllWeiredChars(this.tempForParagraph).toString()).append("</td></tr></table>");
     return sb;
   }
@@ -658,6 +675,10 @@ public class ExtractTextByColumn
   
   private boolean matchPattern(String texts)
   {
+      if(texts.length()<10)
+          texts = texts.substring(0, texts.length());
+      else
+          texts = texts.substring(0, 10);
     this.matcher = this.pattern.matcher(texts);
 //    try
 //    {
@@ -678,6 +699,11 @@ public class ExtractTextByColumn
   
   public String symbolCheck(String cellInHex, TextPosition text)
   {
+    if ("ef80ad".equals(cellInHex))
+    {
+      this.isSymbol = true;
+      return "&ndash;&nbsp&nbsp&nbsp&nbsp";
+    }
     if ("e280a2".equals(cellInHex))
     {
       this.isSymbol = true;
@@ -851,14 +877,14 @@ public class ExtractTextByColumn
           List TextinArea1 = (List)this.stripper.regionCharacterList.get(className);
           List<TextPosition> lis = (List)TextinArea1.get(0);
           this.allCellsList[row][column] = lis;
-          System.out.println("Row: "+row+"Column: "+column+"; Text: "+lis.toString());
+//          System.out.println("Row: "+row+"Column: "+column+"; Text: "+lis.toString());
 //          getTextWithBoldItalicProp(lis);
           this.tableData[row][column] = listToString(lis); //replaceAllWeiredChars(this.tempForParagraph).toString();
           this.leftLetter[row][column] = getFirstSignificantChar(lis, false);
           this.rightLetter[row][column] = getLastSignificantChar(lis, false);
         }
       }
-        System.out.println("");
+//        System.out.println("");
     }
     finally
     {
@@ -1012,6 +1038,44 @@ public class ExtractTextByColumn
     }
   }
 
+  private void getTextWithBoldItalicPropForMultilayerList(List<TextPosition> lis)
+  {
+    this.tempForParagraph = new StringBuffer();
+    TextPosition t = getFirstSignificantChar(lis, false);
+    String fontString = "";
+    if (t != null)
+    {
+      PDFont font = t.getFont();
+      PDFontDescriptor fontDescriptor = font.getFontDescriptor();
+      if (fontDescriptor != null) {
+        fontString = fontDescriptor.getFontName();
+      } else {
+        fontString = "";
+      }
+      this.tempForParagraph.append("<p style=\"font-size: ").append((int)(t.getFontSizeInPt() * 2.0F)).append("px; font-family:").append(fontString).append(";padding-left:").append((t.getX() - rectangles[0][1].x)).append("px;\">");
+    }
+    this.lastIsBold = false;
+    this.lastIsItalic = false;
+    for (int i = 0; i < lis.size(); i++)
+    {
+      TextPosition text = (TextPosition)lis.get(i);
+      processTextt(text);
+    }
+    if (this.lastIsBold)
+    {
+      this.tempForParagraph.append("</b>");
+      this.lastIsBold = false;
+    }
+    if (this.lastIsItalic)
+    {
+      this.tempForParagraph.append("</i>");
+      this.lastIsItalic = false;
+    }
+    if (t != null) {
+      this.tempForParagraph.append("</p>");
+    }
+  }
+  
   public void processTextt(TextPosition text)
   {
     try

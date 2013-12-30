@@ -18,9 +18,9 @@ public class HexStringConverter
   public String stringToHex(String input)
     throws UnsupportedEncodingException
   {
-    if (input == null) {
-      throw new NullPointerException();
-    }
+//    if (input == null) {
+////      throw new NullPointerException();
+//    }
     return asHex(input.getBytes());
   }
   
