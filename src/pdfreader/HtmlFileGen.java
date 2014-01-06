@@ -30,6 +30,7 @@ public class HtmlFileGen
   String imgSavingURL = null;
   ExtractTextByArea extractTextByArea;
   
+  
   public HtmlFileGen(String pathOfPdfFile, String imageSavingDirectory, String imageSavingURL, String projectID, String fileID)
     throws IOException
   {
@@ -47,6 +48,7 @@ public class HtmlFileGen
       success = new File(this.strDirectoy).mkdir();
     }
   }
+  
   
   public String getHtmlContent(int pageNumber, Rectangle rec, String type)
   {
@@ -140,7 +142,7 @@ public class HtmlFileGen
     catch (IOException exception) {}
     return null;
   }
-  
+  Rectangle[][] twoDRect;
   public StringBuffer getTableSinglePixel(Rectangle rectangle, int currentPage)
     throws CryptographyException
   {
@@ -181,6 +183,7 @@ public class HtmlFileGen
     }
     try
     {
+        twoDRect = ColumnWiseRect;
       ETBC.ExtractTextByArea(ColumnWiseRect, numberofRows, numberofColumns - 1);
     }
     catch (IOException ex)

@@ -256,7 +256,7 @@ public class ExtractTextByColumn
     int[] indentetionLocal = findAllignment(numberofRows, numberOfColumns - 1);
     StringBuffer sb = new StringBuffer();
     
-    sb.append("<table style=\"border-collapse:collapse; border:0; width:100%; margin-left:").append(wholeRectangle.x).append(";\">");
+    sb.append("<table style=\"border-collapse:collapse; border:0; width:100%; margin-left:").append(getMarginPosition()).append(";\">");
     String tableHeader = "<tr height = \"2px\">";
     for (int i = 0; i < numberOfColumns - 1; i++) {
       tableHeader = tableHeader.concat("<th width = \"" + Math.ceil(ColumnWiseRect[0][i].width * 95 / wholeRectangle.width) + "%\"></th>");
@@ -550,12 +550,28 @@ public class ExtractTextByColumn
     return sb;
   }
   
+  private float getMarginPosition()
+  {
+      float mostLeft = 500;
+      TextPosition leftMostChar;
+      for(int i = 0; i<allCellsList.length;i++)
+      {
+          if(allCellsList[i][0]!=null)
+          {
+            leftMostChar = getFirstSignificantChar(allCellsList[i][0], true);
+            if(leftMostChar != null && mostLeft>leftMostChar.getXDirAdj())
+                mostLeft = leftMostChar.getXDirAdj();
+          }
+      }
+      return mostLeft;
+  }
+  
   public StringBuffer getListWithAllCellSpan1(Rectangle[][] ColumnWiseRect, Rectangle wholeRectangle, int[][] cellSpan, int numberofRows, int numberOfColumns)
     throws IOException, CryptographyException
   {
     StringBuffer sb = new StringBuffer();
     
-    sb.append("<table border = \"0px\" style=\"border-collapse:collapse; border :black; border-width: 1px; width :100%;margin-left:").append(wholeRectangle.x).append(";\">");
+    sb.append("<table border = \"0px\" style=\"border-collapse:collapse; border :black; border-width: 1px; width :100%;margin-left:").append(getMarginPosition()).append(";\">");
     List<TextPosition> tempList =new ArrayList<>();
     for (int i = 0; i < numberofRows; i++) {
 //        sb.append("<tr>");
@@ -1140,7 +1156,9 @@ public class ExtractTextByColumn
   
   public void appendCharacter(TextPosition text)
   {
+      
     int charInDecimal = text.getCharacter().toCharArray()[0];
+//    System.out.println("Character: "+text.getCharacter()+"; ASCII: "+charInDecimal);
     if (charInDecimal > 255) {
         if(charInDecimal == 8213)
         {
@@ -1161,7 +1179,7 @@ public class ExtractTextByColumn
          else if(charInDecimal == 61607)
         {
             this.tempForParagraph.append("&#9632").append(";");
-        }
+        }         
         else
         {
             this.tempForParagraph.append("&#").append(charInDecimal).append(";");
@@ -1169,12 +1187,19 @@ public class ExtractTextByColumn
     } else if (charInDecimal != 0) {
       if (charInDecimal == 38) {
         this.tempForParagraph.append("&#38;");
-      } else if (charInDecimal == 16) {
+      } 
+      else if (charInDecimal == 16) {
         this.tempForParagraph.append("&#8211;");
-      } else if (charInDecimal == 3) {
+      } 
+      else if (charInDecimal == 3) {
         this.tempForParagraph.append("&#32;");
-      } else if (charInDecimal == 167) {
-      }else {
+      } 
+      else if (charInDecimal == 167) {
+      }
+      else if(charInDecimal == 1){
+            this.tempForParagraph.append("&#35").append(";");
+      }
+      else {
         this.tempForParagraph.append(text.getCharacter().replace("<", "&lt;").replace(">", "&gt;"));
       }
     }
