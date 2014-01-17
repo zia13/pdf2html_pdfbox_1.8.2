@@ -657,9 +657,9 @@ public class ListExtraction {
                 this.tempForParagraph.append("&#32;");
                 this.currentLineofParagraph.append("&#32;");
             } else if (charInDecimal == 167) {
-            } else if(charInDecimal == 1){
-            this.tempForParagraph.append("&#35").append(";");
-      }else {
+            } else if (charInDecimal == 1) {
+                this.tempForParagraph.append("&#35").append(";");
+            } else {
                 this.tempForParagraph.append(text.getCharacter().replace("<", "&lt;").replace(">", "&gt;"));
                 this.currentLineofParagraph.append(text.getCharacter().replace("<", "&lt;").replace(">", "&gt;"));
             }
@@ -686,16 +686,6 @@ public class ListExtraction {
                 this.lastIsBold = false;
             }
             appendCharacter(text);
-
-
-
-
-
-
-
-
-
-
             this.lastMarginLeft = marginLeft;
             this.lastMarginTop = marginTop;
             this.lastMarginRight = ((int) (marginLeft + text.getWidth() * this.zoom));
@@ -712,16 +702,6 @@ public class ListExtraction {
                     this.lastIsItalic = true;
                 }
                 appendCharacter(text);
-
-
-
-
-
-
-
-
-
-
                 this.lastMarginLeft = marginLeft;
                 this.firstCharOfLineStartsAt.add(Integer.valueOf(this.lastMarginLeft));
             } else if ((marginTop > this.lastMarginTop) && ((this.currentLineofParagraph.length() < 3) || (Math.abs(marginTop - this.lastMarginTop - text.getHeight() * this.zoom) >= 24.0F))) {
@@ -798,16 +778,6 @@ public class ListExtraction {
                     this.lastIsBold = false;
                 }
                 appendCharacter(text);
-
-
-
-
-
-
-
-
-
-
                 this.lastMarginLeft = marginLeft;
                 this.firstCharOfLineStartsAt.add(Integer.valueOf(this.lastMarginLeft));
             } else if (marginTop > this.lastMarginTop) {
@@ -830,16 +800,6 @@ public class ListExtraction {
                 }
                 this.tempForParagraph.append("<br/>");
                 appendCharacter(text);
-
-
-
-
-
-
-
-
-
-
                 this.lastMarginLeft = marginLeft;
                 this.firstCharOfLineStartsAt.add(Integer.valueOf(this.lastMarginLeft));
                 this.lastCharOfLineEndsAt.add(Integer.valueOf(this.lastMarginRight));
@@ -861,9 +821,6 @@ public class ListExtraction {
                     this.lastIsBold = false;
                 }
                 appendCharacter(text);
-
-
-
                 this.lastMarginLeft = marginLeft;
             }
             this.lastMarginTop = marginTop;
@@ -1039,16 +996,6 @@ public class ListExtraction {
                 this.lastIsBold = false;
             }
             appendCharacter(text);
-
-
-
-
-
-
-
-
-
-
             this.lastMarginLeft = marginLeft;
             this.lastMarginTop = marginTop;
             this.lastMarginRight = ((int) (marginLeft + text.getWidth() * this.zoom));
@@ -1065,16 +1012,6 @@ public class ListExtraction {
                     this.lastIsItalic = true;
                 }
                 appendCharacter(text);
-
-
-
-
-
-
-
-
-
-
                 this.lastMarginLeft = marginLeft;
                 this.firstCharOfLineStartsAt.add(Integer.valueOf(this.lastMarginLeft));
             } else if ((marginTop > this.lastMarginTop) && ((this.currentLineofParagraph.length() < 3) || (Math.abs(marginTop - this.lastMarginTop - text.getHeight() * this.zoom) >= 24.0F))) {
@@ -1151,16 +1088,6 @@ public class ListExtraction {
                     this.lastIsBold = false;
                 }
                 appendCharacter(text);
-
-
-
-
-
-
-
-
-
-
                 this.lastMarginLeft = marginLeft;
                 this.firstCharOfLineStartsAt.add(Integer.valueOf(this.lastMarginLeft));
             } else if (marginTop > this.lastMarginTop) {
@@ -1182,16 +1109,6 @@ public class ListExtraction {
                     this.lastIsBold = false;
                 }
                 appendCharacter(text);
-
-
-
-
-
-
-
-
-
-
                 this.lastMarginLeft = marginLeft;
                 this.firstCharOfLineStartsAt.add(Integer.valueOf(this.lastMarginLeft));
                 this.lastCharOfLineEndsAt.add(Integer.valueOf(this.lastMarginRight));
@@ -1213,17 +1130,6 @@ public class ListExtraction {
                     this.lastIsBold = false;
                 }
                 appendCharacter(text);
-
-
-
-
-
-
-
-
-
-
-
                 this.lastMarginLeft = marginLeft;
             }
             this.lastMarginTop = marginTop;

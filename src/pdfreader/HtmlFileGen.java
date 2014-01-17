@@ -29,11 +29,10 @@ public class HtmlFileGen
   String imgSavingDirectory = null;
   String imgSavingURL = null;
   ExtractTextByArea extractTextByArea;
-  
+  Rectangle[][] twoDRect;
   
   public HtmlFileGen(String pathOfPdfFile, String imageSavingDirectory, String imageSavingURL, String projectID, String fileID)
-    throws IOException
-  {
+    throws IOException{
     this.imgSavingDirectory = imageSavingDirectory.concat("p" + projectID + "_f" + fileID + "-");
     this.imgSavingURL = imageSavingURL.concat("p" + projectID + "_f" + fileID + "-");
     this.pdfPath = pathOfPdfFile;
@@ -50,8 +49,7 @@ public class HtmlFileGen
   }
   
   
-  public String getHtmlContent(int pageNumber, Rectangle rec, String type)
-  {
+  public String getHtmlContent(int pageNumber, Rectangle rec, String type){
     StringBuffer htmlContent = null;
     if ("table".equals(type))
     {
@@ -122,8 +120,7 @@ public class HtmlFileGen
     return htmlContent.toString();
   }
   
-  private StringBuffer saveImage(int pNumber, Rectangle rect, int imageNumber)
-  {
+  private StringBuffer saveImage(int pNumber, Rectangle rect, int imageNumber){
     try
     {
       PDDocument doc = PDDocument.load(this.pdfPath);
@@ -142,10 +139,8 @@ public class HtmlFileGen
     catch (IOException exception) {}
     return null;
   }
-  Rectangle[][] twoDRect;
-  public StringBuffer getTableSinglePixel(Rectangle rectangle, int currentPage)
-    throws CryptographyException
-  {
+
+  public StringBuffer getTableSinglePixel(Rectangle rectangle, int currentPage) throws CryptographyException{
     int dividedRegionWidth = 1;
     StringBuffer sb = null;
     int[] regioon = null;
@@ -229,8 +224,7 @@ public class HtmlFileGen
     return sb;
   }
   
-  private StringBuffer replaceAllWeiredChars(StringBuffer sb)
-  {
+  private StringBuffer replaceAllWeiredChars(StringBuffer sb){
     String ss = sb.toString();
     ss = ss.replace("•", "&bull;").replace("®", "&#174;").replace("†", "&#8224;").replace("’", "&#8217;").replace("”", "&#8221;").replace("“", "&#8220;").replace("—", "&#8212;").replace("–", "&#8211;").replace(" ", " ").replace("©", "&#169;").replace("­", "&#8211;");
     
@@ -238,8 +232,7 @@ public class HtmlFileGen
     return stringBuffer;
   }
   
-  public StringBuffer getListSinglePixelRow(String pdfFile, Rectangle rectangle, int currentPage)
-    throws CryptographyException{
+  public StringBuffer getListSinglePixelRow(String pdfFile, Rectangle rectangle, int currentPage) throws CryptographyException{
     StringBuffer sb = null;
     ExtractTextByAreaSinglePixel ETB = new ExtractTextByAreaSinglePixel();
     try
@@ -284,8 +277,7 @@ public class HtmlFileGen
     return sb;
   }
   
-  public StringBuffer getListSinglePixelRowColumn(String pdfFile, Rectangle rectangle, int currentPage)
-    throws CryptographyException{
+  public StringBuffer getListSinglePixelRowColumn(String pdfFile, Rectangle rectangle, int currentPage)throws CryptographyException{
     StringBuffer sb = null;
     int[] regiooon = null;
     int[] regioon = new int[3];
@@ -344,8 +336,7 @@ public class HtmlFileGen
   }
   
   
-  public TextPosition getLastSignificantChar(List<TextPosition>[][] cellText, int rowPos, int columnPos)
-  {
+  public TextPosition getLastSignificantChar(List<TextPosition>[][] cellText, int rowPos, int columnPos){
     for (int i = columnPos; i >= 0; i--)
     {
       if (cellText[rowPos][i].size() > 0) {
@@ -360,8 +351,7 @@ public class HtmlFileGen
     return null;
   }
   
-  public TextPosition getFirstSignificantChar(List<TextPosition>[][] cellText, int row, int col)
-  {
+  public TextPosition getFirstSignificantChar(List<TextPosition>[][] cellText, int row, int col){
     for (int i = 0; i < cellText[row][col].size(); i++) {
       if ((!((TextPosition)cellText[row][col].get(i)).getCharacter().equals(" ")) && (!((TextPosition)cellText[row][col].get(i)).getCharacter().equals(")"))) {
         return (TextPosition)cellText[row][col].get(i);
