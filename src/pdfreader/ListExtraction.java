@@ -44,6 +44,22 @@ public class ListExtraction {
     private StringBuffer currentLine = new StringBuffer();
     List<Integer> firstCharOfLineStartsAt = new ArrayList();
     List<Integer> lastCharOfLineEndsAt = new ArrayList();
+    StringBuffer sbForParagraph = new StringBuffer("<div align = \"center\">");
+    StringBuffer tempForParagraph = new StringBuffer();
+    StringBuffer currentLineofParagraph = new StringBuffer();
+    StringBuffer sbForList = new StringBuffer("<table>");
+    StringBuffer pTag = new StringBuffer("\">");
+    String regex = "[(a-zA-Z0-9]+[.)]";
+    Pattern pattern = Pattern.compile(this.regex);
+    Matcher matcher;
+    int start = 0;
+    int end = 0;
+    int firstCharPos = 0;
+    int firstSymbolPosition = 0;
+    int layerCount;
+    boolean lastIsBold = false;
+    boolean lastIsItalic = false;
+    boolean isSymbol = false;
 
     public ListExtraction(String outputFileName, int type, float zoom)
             throws IOException {
@@ -123,12 +139,7 @@ public class ListExtraction {
             }
         } catch (IOException e) {
         }
-    }
-    StringBuffer sbForParagraph = new StringBuffer("<div align = \"center\">");
-    StringBuffer tempForParagraph = new StringBuffer();
-    StringBuffer currentLineofParagraph = new StringBuffer();
-    StringBuffer sbForList = new StringBuffer("<table>");
-    StringBuffer pTag = new StringBuffer("\">");
+    }    
 
     public StringBuffer getParagraph() {
         int alignment = 0;
@@ -162,11 +173,7 @@ public class ListExtraction {
         this.tempForParagraph = new StringBuffer();
         return this.sbForParagraph.append(closeItalicTag).append(closeBoldTag).append("</p></div>");
     }
-    String regex = "[(a-zA-Z0-9]+[.)]";
-    Pattern pattern = Pattern.compile(this.regex);
-    Matcher matcher;
-    int start = 0;
-    int end = 0;
+    
 
     private boolean matchPattern(String texts) {
         this.matcher = this.pattern.matcher(texts);
@@ -186,14 +193,6 @@ public class ListExtraction {
     public StringBuffer getList() {
         String ss = this.sbForList.toString();
         StringBuffer sb = new StringBuffer();
-
-
-
-
-
-
-
-
         sb.append(ss).append("</td></tr></table>");
         return sb;
     }
@@ -325,9 +324,7 @@ public class ListExtraction {
         this.lastMarginLeft = marginLeft;
         this.lastMarginRight = ((int) (marginLeft + text.getWidth() * this.zoom));
     }
-    int firstCharPos = 0;
-    int firstSymbolPosition = 0;
-    int layerCount;
+    
 
     private void listExtractionFromTextposition(TextPosition text, int marginLeft, int marginTop, int fontSizePx, String fontString, boolean isBold, boolean isItalic)
             throws IOException {
@@ -413,6 +410,7 @@ public class ListExtraction {
                     this.htmlFile.write("</p>\n");
                 }
             }
+            
             this.numberSpace = 0;
             this.sizeAllSpace = 0;
             this.currentLine = new StringBuffer();
@@ -477,8 +475,7 @@ public class ListExtraction {
         this.lastMarginLeft = marginLeft;
         this.lastMarginRight = ((int) (marginLeft + text.getWidth() * this.zoom));
     }
-    boolean lastIsBold = false;
-    boolean lastIsItalic = false;
+    
 
     public void paragraphCreationWithLineBreak1(TextPosition text, int marginLeft, int marginTop, int fontSizePx, String fontString, boolean isBold, boolean isItalic)
             throws IOException {
@@ -1140,7 +1137,7 @@ public class ListExtraction {
             throws IOException {
         this.htmlFile.write("</td></tr></table></body></html>");
     }
-    boolean isSymbol = false;
+    
 
     public String symbolCheck(String cellInHex, TextPosition text) {
         if ("e280a2".equals(cellInHex)) {
