@@ -14,11 +14,11 @@ import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.util.ImageIOUtil;
 import org.apache.pdfbox.util.PDFTextStripper;
 import org.apache.pdfbox.util.TextPosition;
+import org.json.simple.JSONObject;
 
 public class HtmlFileGen
   extends PDFTextStripper
 {
-  float previousAveCharWidth = -1.0F;
   List<PDPage> pages = null;
   int spanCounter = 0;
   String pdfPath;
@@ -144,48 +144,48 @@ public class HtmlFileGen
     int dividedRegionWidth = 1;
     StringBuffer sb = null;
     int[] regioon = null;
-    ExtractTextByAreaSinglePixel ETB = new ExtractTextByAreaSinglePixel();
+    ExtractTextByAreaSinglePixel eTB = new ExtractTextByAreaSinglePixel();
     try
     {
-      regioon = ETB.extractTextByArea(this.pdfPath, rectangle, currentPage, 0);
+      regioon = eTB.extractTextByArea(this.pdfPath, rectangle, currentPage, 0);
     }
     catch (IOException ex)
     {
       Logger.getLogger(HtmlFileGenerate.class.getName()).log(Level.SEVERE, null, ex);
     }
-    int[] positionOfRowStart = ETB.getPointOfRowStart();
-    int numberofRows = ETB.returnNumberofRows();
-    int numberofColumns = ETB.returnNumberofColumns();
+    int[] positionOfRowStart = eTB.getPointOfRowStart();
+    int numberofRows = eTB.returnNumberofRows();
+    int numberofColumns = eTB.returnNumberofColumns();
     
 
 
-    ExtractTextByColumn ETBC = new ExtractTextByColumn(this.pdfPath, currentPage);
+    ExtractTextByColumn eTBC = new ExtractTextByColumn(this.pdfPath, currentPage);
     
-    Rectangle[][] ColumnWiseRect = new Rectangle[numberofRows][numberofColumns - 1];
+    Rectangle[][] columnWiseRect = new Rectangle[numberofRows][numberofColumns - 1];
     int[][] cellSpan = new int[numberofRows][numberofColumns];
     for (int row = 0; row < numberofRows; row++) {
       for (int column = 0; column < numberofColumns - 1; column++) {
         if ((column == 0) && (row == 0)) {
-          ColumnWiseRect[row][column] = new Rectangle(rectangle.x, rectangle.y, regioon[(column + 1)] * dividedRegionWidth - rectangle.x, positionOfRowStart[row] - rectangle.y);
+          columnWiseRect[row][column] = new Rectangle(rectangle.x, rectangle.y, regioon[(column + 1)] * dividedRegionWidth - rectangle.x, positionOfRowStart[row] - rectangle.y);
         } else if ((row == 0) && (column > 0)) {
-          ColumnWiseRect[row][column] = new Rectangle(regioon[column] * dividedRegionWidth, rectangle.y, regioon[(column + 1)] * dividedRegionWidth - regioon[column] * dividedRegionWidth, positionOfRowStart[row] - rectangle.y);
+          columnWiseRect[row][column] = new Rectangle(regioon[column] * dividedRegionWidth, rectangle.y, regioon[(column + 1)] * dividedRegionWidth - regioon[column] * dividedRegionWidth, positionOfRowStart[row] - rectangle.y);
         } else if ((column == 0) && (row > 0)) {
-          ColumnWiseRect[row][column] = new Rectangle(rectangle.x, positionOfRowStart[(row - 1)], regioon[(column + 1)] * dividedRegionWidth - rectangle.x, positionOfRowStart[row] - positionOfRowStart[(row - 1)]);
+          columnWiseRect[row][column] = new Rectangle(rectangle.x, positionOfRowStart[(row - 1)], regioon[(column + 1)] * dividedRegionWidth - rectangle.x, positionOfRowStart[row] - positionOfRowStart[(row - 1)]);
         } else if ((column > 0) && (row > 0)) {
-          ColumnWiseRect[row][column] = new Rectangle(regioon[column] * dividedRegionWidth, positionOfRowStart[(row - 1)], regioon[(column + 1)] * dividedRegionWidth - regioon[column] * dividedRegionWidth, positionOfRowStart[row] - positionOfRowStart[(row - 1)]);
+          columnWiseRect[row][column] = new Rectangle(regioon[column] * dividedRegionWidth, positionOfRowStart[(row - 1)], regioon[(column + 1)] * dividedRegionWidth - regioon[column] * dividedRegionWidth, positionOfRowStart[row] - positionOfRowStart[(row - 1)]);
         }
       }
     }
     try
     {
-        twoDRect = ColumnWiseRect;
-      ETBC.ExtractTextByArea(ColumnWiseRect, numberofRows, numberofColumns - 1);
+        twoDRect = columnWiseRect;
+      eTBC.ExtractTextByArea(columnWiseRect, numberofRows, numberofColumns - 1);
     }
     catch (IOException ex)
     {
       Logger.getLogger(HtmlFileGenerate.class.getName()).log(Level.SEVERE, null, ex);
     }
-    List<TextPosition>[][] aCWTP = ETBC.getAllCellsWithTextProperties();
+    List<TextPosition>[][] aCWTP = eTBC.getAllCellsWithTextProperties();
     for (int rowPos = 0; rowPos < numberofRows; rowPos++) {
       for (int columnPos = 1; columnPos < numberofColumns - 1; columnPos++) {
         if ((aCWTP[rowPos][columnPos] != null) && (aCWTP[rowPos][columnPos].size() >= 1))
@@ -214,7 +214,7 @@ public class HtmlFileGen
     }
     try
     {
-      sb = ETBC.getTableWithAllCellsSpan(ColumnWiseRect, rectangle, cellSpan, numberofRows, numberofColumns);
+      sb = eTBC.getTableWithAllCellsSpan(columnWiseRect, rectangle, cellSpan, numberofRows, numberofColumns);
     }
     catch (IOException ex)
     {

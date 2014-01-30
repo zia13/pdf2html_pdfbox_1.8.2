@@ -44,7 +44,7 @@ public class ListExtraction {
     private StringBuffer currentLine = new StringBuffer();
     List<Integer> firstCharOfLineStartsAt = new ArrayList();
     List<Integer> lastCharOfLineEndsAt = new ArrayList();
-    StringBuffer sbForParagraph = new StringBuffer("<div align = \"center\">");
+    StringBuffer sbForParagraph = new StringBuffer();
     StringBuffer tempForParagraph = new StringBuffer();
     StringBuffer currentLineofParagraph = new StringBuffer();
     StringBuffer sbForList = new StringBuffer("<table>");
@@ -171,7 +171,7 @@ public class ListExtraction {
         }
         this.sbForParagraph.append(this.align).append(this.tempForParagraph);
         this.tempForParagraph = new StringBuffer();
-        return this.sbForParagraph.append(closeItalicTag).append(closeBoldTag).append("</p></div>");
+        return this.sbForParagraph.append(closeItalicTag).append(closeBoldTag).append("</p>");
     }
     
 

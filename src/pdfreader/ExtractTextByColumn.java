@@ -22,6 +22,7 @@ import org.apache.pdfbox.pdmodel.font.PDFont;
 import org.apache.pdfbox.pdmodel.font.PDFontDescriptor;
 import org.apache.pdfbox.util.PDFTextStripperByArea;
 import org.apache.pdfbox.util.TextPosition;
+import org.json.simple.JSONObject;
 
 public class ExtractTextByColumn
 {
@@ -256,10 +257,10 @@ public class ExtractTextByColumn
     int[] indentetionLocal = findAllignment(numberofRows, numberOfColumns - 1);
     StringBuffer sb = new StringBuffer();
     
-    sb.append("<table style=\"border-collapse:collapse; border:0; width:100%; margin-left:").append(getMarginPosition()).append(";\">");
+    sb.append("<table border =\"0\" width=\"100%\" cellspacing=\" 0\" cellpadding=\" 0\"  style=\"border-color:black; border-collapse:collapse; margin-left:").append(getMarginPosition()).append(";\">");
     String tableHeader = "<tr height = \"2px\">";
     for (int i = 0; i < numberOfColumns - 1; i++) {
-      tableHeader = tableHeader.concat("<th width = \"" + Math.ceil(ColumnWiseRect[0][i].width * 95 / wholeRectangle.width) + "%\"></th>");
+      tableHeader = tableHeader.concat("<th width = \"" + Math.ceil(ColumnWiseRect[0][i].width * 100 / wholeRectangle.width) + "%\"></th>");
     }
     tableHeader = tableHeader.concat("</tr>");
     sb.append(tableHeader);
