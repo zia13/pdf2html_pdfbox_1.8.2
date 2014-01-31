@@ -22,7 +22,6 @@ import org.apache.pdfbox.pdmodel.font.PDFont;
 import org.apache.pdfbox.pdmodel.font.PDFontDescriptor;
 import org.apache.pdfbox.util.PDFTextStripperByArea;
 import org.apache.pdfbox.util.TextPosition;
-import org.json.simple.JSONObject;
 
 public class ExtractTextByColumn
 {
@@ -1031,7 +1030,7 @@ public class ExtractTextByColumn
       } else {
         fontString = "";
       }
-      this.tempForParagraph.append("<p style=\"font-size: ").append((int)(t.getFontSizeInPt() * 2.0F)).append("px; font-family:").append(fontString).append(";\">");
+      //this.tempForParagraph.append("<p style=\"font-size: ").append((int)(t.getFontSizeInPt() * 2.0F)).append("px; font-family:").append(fontString).append(";\">");
     }
     this.lastIsBold = false;
     this.lastIsItalic = false;
@@ -1051,7 +1050,7 @@ public class ExtractTextByColumn
       this.lastIsItalic = false;
     }
     if (t != null) {
-      this.tempForParagraph.append("</p>");
+      //this.tempForParagraph.append("</p>");
     }
   }
 
