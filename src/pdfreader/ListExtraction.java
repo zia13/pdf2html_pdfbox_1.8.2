@@ -44,7 +44,7 @@ public class ListExtraction {
     private StringBuffer currentLine = new StringBuffer();
     List<Integer> firstCharOfLineStartsAt = new ArrayList();
     List<Integer> lastCharOfLineEndsAt = new ArrayList();
-    StringBuffer sbForParagraph = new StringBuffer();
+    StringBuffer sbForParagraph = new StringBuffer("<div align = \"center\">");
     StringBuffer tempForParagraph = new StringBuffer();
     StringBuffer currentLineofParagraph = new StringBuffer();
     StringBuffer sbForList = new StringBuffer("<table>");
@@ -81,8 +81,7 @@ public class ListExtraction {
         }
     }
 
-    public ListExtraction(int type, float zoom)
-            throws IOException {
+    public ListExtraction(int type, float zoom) throws IOException {
         this.type = type;
         this.zoom = zoom;
         this.layerCount = 0;
@@ -132,14 +131,14 @@ public class ListExtraction {
                 renderingGroupByLineWithCache(text, marginLeft, marginTop, fontSizePx, fontString, isBold, isItalic);
             } else if (this.type == 3) {
                 paragraphCreationWithLineBreak(text, marginLeft, marginTop, fontSizePx, fontString, isBold, isItalic);
-            } else if (this.type == 5) {
-                paragraphCreationWithoutLineBreak(text, marginLeft, marginTop, fontSizePx, fontString, isBold, isItalic);
             } else if (this.type == 4) {
                 listExtractionFromTextposition(text, marginLeft, marginTop, fontSizePx, fontString, isBold, isItalic);
+            } else if (this.type == 5) {
+                paragraphCreationWithoutLineBreak(text, marginLeft, marginTop, fontSizePx, fontString, isBold, isItalic);
             }
         } catch (IOException e) {
         }
-    }    
+    }
 
     public StringBuffer getParagraph() {
         int alignment = 0;
@@ -171,9 +170,8 @@ public class ListExtraction {
         }
         this.sbForParagraph.append(this.align).append(this.tempForParagraph);
         this.tempForParagraph = new StringBuffer();
-        return this.sbForParagraph.append(closeItalicTag).append(closeBoldTag).append("</p>");
+        return this.sbForParagraph.append(closeItalicTag).append(closeBoldTag).append("</p></div>");
     }
-    
 
     private boolean matchPattern(String texts) {
         this.matcher = this.pattern.matcher(texts);
@@ -324,7 +322,6 @@ public class ListExtraction {
         this.lastMarginLeft = marginLeft;
         this.lastMarginRight = ((int) (marginLeft + text.getWidth() * this.zoom));
     }
-    
 
     private void listExtractionFromTextposition(TextPosition text, int marginLeft, int marginTop, int fontSizePx, String fontString, boolean isBold, boolean isItalic)
             throws IOException {
@@ -410,7 +407,7 @@ public class ListExtraction {
                     this.htmlFile.write("</p>\n");
                 }
             }
-            
+
             this.numberSpace = 0;
             this.sizeAllSpace = 0;
             this.currentLine = new StringBuffer();
@@ -475,7 +472,6 @@ public class ListExtraction {
         this.lastMarginLeft = marginLeft;
         this.lastMarginRight = ((int) (marginLeft + text.getWidth() * this.zoom));
     }
-    
 
     public void paragraphCreationWithLineBreak1(TextPosition text, int marginLeft, int marginTop, int fontSizePx, String fontString, boolean isBold, boolean isItalic)
             throws IOException {
@@ -996,7 +992,8 @@ public class ListExtraction {
             this.lastMarginLeft = marginLeft;
             this.lastMarginTop = marginTop;
             this.lastMarginRight = ((int) (marginLeft + text.getWidth() * this.zoom));
-        } else {
+        }
+        else {
             this.lastMarginRight = ((int) (marginLeft + text.getWidth() * this.zoom));
             if (this.lastMarginTop == 0) {
                 this.tempForParagraph.append("padding-left:").append(marginLeft / 2).append("px;font-size: ").append(fontSizePx).append("px; font-family:").append(fontString).append(";\">");
@@ -1137,7 +1134,6 @@ public class ListExtraction {
             throws IOException {
         this.htmlFile.write("</td></tr></table></body></html>");
     }
-    
 
     public String symbolCheck(String cellInHex, TextPosition text) {
         if ("e280a2".equals(cellInHex)) {

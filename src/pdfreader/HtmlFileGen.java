@@ -14,7 +14,6 @@ import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.util.ImageIOUtil;
 import org.apache.pdfbox.util.PDFTextStripper;
 import org.apache.pdfbox.util.TextPosition;
-import org.json.simple.JSONObject;
 
 public class HtmlFileGen
         extends PDFTextStripper {
@@ -49,13 +48,7 @@ public class HtmlFileGen
 
     public String getHtmlContent(int pageNumber, Rectangle rec, String type) {
         StringBuffer htmlContent = null;
-        if ("table".equals(type)) {
-            try {
-                htmlContent = getTableSinglePixel(rec, pageNumber);
-            } catch (CryptographyException ex) {
-                Logger.getLogger(HtmlFileGenerate.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        } else if ("paragraph".equals(type)) {
+        if ("paragraph".equals(type)) {
             try {
                 this.extractTextByArea = new ExtractTextByArea();
                 this.TextinAr = this.extractTextByArea.extractRegionTextAllOnce(this.pdfPath, rec, pageNumber, 0);
@@ -80,6 +73,12 @@ public class HtmlFileGen
                 }
                 htmlContent = replaceAllWeiredChars(this.listt.getParagraph());
             } catch (IOException | CryptographyException ex) {
+                Logger.getLogger(HtmlFileGenerate.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        } else if ("table".equals(type)) {
+            try {
+                htmlContent = getTableSinglePixel(rec, pageNumber);
+            } catch (CryptographyException ex) {
                 Logger.getLogger(HtmlFileGenerate.class.getName()).log(Level.SEVERE, null, ex);
             }
         } else if ("list".equals(type)) {
@@ -127,11 +126,7 @@ public class HtmlFileGen
         int[] positionOfRowStart = eTB.getPointOfRowStart();
         int numberofRows = eTB.returnNumberofRows();
         int numberofColumns = eTB.returnNumberofColumns();
-
-
-
         ExtractTextByColumn eTBC = new ExtractTextByColumn(this.pdfPath, currentPage);
-
         Rectangle[][] columnWiseRect = new Rectangle[numberofRows][numberofColumns - 1];
         int[][] cellSpan = new int[numberofRows][numberofColumns];
         for (int row = 0; row < numberofRows; row++) {
