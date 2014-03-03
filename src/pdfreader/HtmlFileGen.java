@@ -55,7 +55,7 @@ public class HtmlFileGen
                 this.listt = new ListExtraction(5, 2.0F);
                 for (int i = 0; i < this.TextinAr.size(); i++) {
                     TextPosition text = (TextPosition) this.TextinAr.get(i);
-                    int charInDecimal = text.getCharacter().toCharArray()[0];
+                    //int charInDecimal = text.getCharacter().toCharArray()[0];
                     this.listt.processTextt(text);
                 }
                 htmlContent = replaceAllWeiredChars(this.listt.getParagraph());

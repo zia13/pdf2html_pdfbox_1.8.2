@@ -44,7 +44,8 @@ public class ListExtraction {
     private StringBuffer currentLine = new StringBuffer();
     List<Integer> firstCharOfLineStartsAt = new ArrayList();
     List<Integer> lastCharOfLineEndsAt = new ArrayList();
-    StringBuffer sbForParagraph = new StringBuffer("<div align = \"center\">");
+//    StringBuffer sbForParagraph = new StringBuffer("<div align = \"center\">");
+    StringBuffer sbForParagraph = new StringBuffer("");
     StringBuffer tempForParagraph = new StringBuffer();
     StringBuffer currentLineofParagraph = new StringBuffer();
     StringBuffer sbForList = new StringBuffer("<table>");
@@ -142,21 +143,42 @@ public class ListExtraction {
 
     public StringBuffer getParagraph() {
         int alignment = 0;
-        switch (alignment) {
-            case 2:
-                this.align = "</p><p style=\"text-align:justify;";
-                break;
-            case 0:
-                this.align = "</p><p style=\"text-align:left;";
-                break;
-            case 1:
-                this.align = "</p><p style=\"text-align:right;";
-                break;
-            case 3:
-                this.align = "</p><p style=\"text-align:center;";
-                break;
-            default:
-                this.align = "</p><p style=\"text-align:left;";
+        if(sbForParagraph.length()<3)
+        {
+            switch (alignment) {
+                case 2:
+                    this.align = "<p style=\"text-align:justify;";
+                    break;
+                case 0:
+                    this.align = "<p style=\"text-align:left;";
+                    break;
+                case 1:
+                    this.align = "<p style=\"text-align:right;";
+                    break;
+                case 3:
+                    this.align = "<p style=\"text-align:center;";
+                    break;
+                default:
+                    this.align = "<p style=\"text-align:left;";
+            }
+        }
+        else{
+            switch (alignment) {
+                case 2:
+                    this.align = "</p><p style=\"text-align:justify;";
+                    break;
+                case 0:
+                    this.align = "</p><p style=\"text-align:left;";
+                    break;
+                case 1:
+                    this.align = "</p><p style=\"text-align:right;";
+                    break;
+                case 3:
+                    this.align = "</p><p style=\"text-align:center;";
+                    break;
+                default:
+                    this.align = "</p><p style=\"text-align:left;";
+            }
         }
         String closeBoldTag = "";
         String closeItalicTag = "";
@@ -170,7 +192,8 @@ public class ListExtraction {
         }
         this.sbForParagraph.append(this.align).append(this.tempForParagraph);
         this.tempForParagraph = new StringBuffer();
-        return this.sbForParagraph.append(closeItalicTag).append(closeBoldTag).append("</p></div>");
+//        return this.sbForParagraph.append(closeItalicTag).append(closeBoldTag).append("</p></div>");
+        return this.sbForParagraph.append(closeItalicTag).append(closeBoldTag).append("</p>");
     }
 
     private boolean matchPattern(String texts) {
