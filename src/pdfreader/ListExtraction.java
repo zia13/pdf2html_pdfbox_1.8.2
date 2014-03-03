@@ -708,7 +708,7 @@ public class ListExtraction {
         } else {
             this.lastMarginRight = ((int) (marginLeft + text.getWidth() * this.zoom));
             if (this.lastMarginTop == 0) {
-                this.tempForParagraph.append("padding-left:").append(marginLeft / 2).append("px; font-size: ").append(fontSizePx).append("px; font-family:").append(fontString).append(";\">");
+                this.tempForParagraph.append("padding-left:").append(marginLeft / 2).append("px;\">").append("<font style=\"font-size: ").append(fontSizePx).append("px; font-family:").append(fontString).append(";color:;\">");
                 if (isBold) {
                     this.tempForParagraph.append("<b>");
                     this.lastIsBold = true;
@@ -756,19 +756,19 @@ public class ListExtraction {
                     this.tempForParagraph.append(closeItalicTag).append(closeBoldTag);
                     switch (alignment) {
                         case 2:
-                            this.align = "</p><p style=\"text-align:justify;";
+                            this.align = "</font></p><p style=\"text-align:justify;";
                             break;
                         case 0:
-                            this.align = "</p><p style=\"text-align:left;";
+                            this.align = "</font></p><p style=\"text-align:left;";
                             break;
                         case 1:
-                            this.align = "</p><p style=\"text-align:right;";
+                            this.align = "</font></p><p style=\"text-align:right;";
                             break;
                         case 3:
-                            this.align = "</p><p style=\"text-align:center;";
+                            this.align = "</font></p><p style=\"text-align:center;";
                             break;
                         default:
-                            this.align = "</p><p style=\"text-align:left;";
+                            this.align = "</font></p><p style=\"text-align:left;";
                     }
                 }
                 this.sbForParagraph.append(this.align).append(this.tempForParagraph);
@@ -776,7 +776,7 @@ public class ListExtraction {
                 this.currentLineofParagraph = new StringBuffer();
                 this.firstCharOfLineStartsAt = new ArrayList();
                 this.lastCharOfLineEndsAt = new ArrayList();
-                this.tempForParagraph.append("padding-left:").append(marginLeft / 2).append("px; font-size: ").append(fontSizePx).append("px; font-family:").append(fontString).append(";\">");
+                this.tempForParagraph.append("padding-left:").append(marginLeft / 2).append("px;\">").append("<font style=\"font-size: ").append(fontSizePx).append("px; font-family:").append(fontString).append(";color:;\">");
                 if ((isBold) && (!this.lastIsBold)) {
                     this.tempForParagraph.append("<b>");
                     this.lastIsBold = true;
@@ -1019,7 +1019,7 @@ public class ListExtraction {
         else {
             this.lastMarginRight = ((int) (marginLeft + text.getWidth() * this.zoom));
             if (this.lastMarginTop == 0) {
-                this.tempForParagraph.append("padding-left:").append(marginLeft / 2).append("px;font-size: ").append(fontSizePx).append("px; font-family:").append(fontString).append(";\">");
+                this.tempForParagraph.append("padding-left:").append(marginLeft / 2).append("px;\">").append("<font style=\"font-size: ").append(fontSizePx).append("px; font-family:").append(fontString).append(";color:;\">");
                 if (isBold) {
                     this.tempForParagraph.append("<b>");
                     this.lastIsBold = true;
@@ -1067,19 +1067,19 @@ public class ListExtraction {
                     this.tempForParagraph.append(closeItalicTag).append(closeBoldTag);
                     switch (alignment) {
                         case 2:
-                            this.align = "</p><p style=\"text-align:justify;";
+                            this.align = "</font></p><p style=\"text-align:justify;";
                             break;
                         case 0:
-                            this.align = "</p><p style=\"text-align:left;";
+                            this.align = "</font></p><p style=\"text-align:left;";
                             break;
                         case 1:
-                            this.align = "</p><p style=\"text-align:right;";
+                            this.align = "</font></p><p style=\"text-align:right;";
                             break;
                         case 3:
-                            this.align = "</p><p style=\"text-align:center;";
+                            this.align = "</font></p><p style=\"text-align:center;";
                             break;
                         default:
-                            this.align = "</p><p style=\"text-align:left;";
+                            this.align = "</font></p><p style=\"text-align:left;";
                     }
                 }
                 this.sbForParagraph.append(this.align).append(this.tempForParagraph);
@@ -1087,7 +1087,7 @@ public class ListExtraction {
                 this.currentLineofParagraph = new StringBuffer();
                 this.firstCharOfLineStartsAt = new ArrayList();
                 this.lastCharOfLineEndsAt = new ArrayList();
-                this.tempForParagraph.append("padding-left:").append(marginLeft / 2).append("px; font-size: ").append(fontSizePx).append("px; font-family:").append(fontString).append(";\">");
+                this.tempForParagraph.append("padding-left:").append(marginLeft / 2).append("px;\">").append("<font style=\"font-size: ").append(fontSizePx).append("px; font-family:").append(fontString).append(";color:;\">");
                 if ((isBold) && (!this.lastIsBold)) {
                     this.tempForParagraph.append("<b>");
                     this.lastIsBold = true;
