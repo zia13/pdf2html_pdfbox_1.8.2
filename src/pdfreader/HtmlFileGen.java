@@ -106,7 +106,8 @@ public class HtmlFileGen
             ImageIOUtil.writeImage(pageAsImage, "jpg", imageFilename, 8, 300);
             String imageURL = this.imgSavingURL.concat(pNumber + "-" + imageNumber);
 
-            String ss = "<p padding-left = \"" + rect.x + "px\"><img src=\"" + imageURL + ".jpg\" " + "height=\"" + rect.height * 2 + "px\" width=\"" + rect.width * 2 + "px\"/></p>";
+//            String ss = "<p padding-left = \"" + rect.x + "px\"><img src=\"" + imageURL + ".jpg\" " + "height=\"" + rect.height * 2 + "px\" width=\"" + rect.width * 2 + "px\"/></p>";
+            String ss = "<p padding-left = \"" + 0 + "px\"><img src=\"" + imageURL + ".jpg\" " + "height=\"" + rect.height * 2 + "px\" width=\"" + rect.width * 2 + "px\"/></p>";
             return new StringBuffer(ss);
         } catch (IOException exception) {
         }

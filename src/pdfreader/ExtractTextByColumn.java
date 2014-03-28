@@ -221,8 +221,7 @@ public class ExtractTextByColumn {
         }
         int[] indentetionLocal = findAllignment(numberofRows, numberOfColumns - 1);
         StringBuffer sb = new StringBuffer();
-
-        sb.append("<table border =\"0\" width=\"100%\" cellspacing=\" 0\" cellpadding=\" 0\"  style=\"border-color:black; border-collapse:collapse; margin-left:").append(getMarginPosition()).append(";\">");
+        sb.append("<table border =\"0\" width=\"100%\" cellspacing=\" 0\" cellpadding=\" 0\"  style=\"border-color:black; border-collapse:collapse; margin-left:").append(getMarginPosition()).append("px;\">");
         String tableHeader = "<tr height = \"2px\">";
         for (int i = 0; i < numberOfColumns - 1; i++) {
             tableHeader = tableHeader.concat("<th width = \"" + Math.ceil(ColumnWiseRect[0][i].width * 100 / wholeRectangle.width) + "%\"></th>");
@@ -464,7 +463,7 @@ public class ExtractTextByColumn {
         return sb;
     }
 
-    private float getMarginPosition() {
+    private int getMarginPosition() {
         float mostLeft = 500;
         TextPosition leftMostChar;
         for (int i = 0; i < allCellsList.length; i++) {
@@ -475,14 +474,15 @@ public class ExtractTextByColumn {
                 }
             }
         }
-        return mostLeft;
+        return Math.round(mostLeft);
     }
 
     public StringBuffer getListWithAllCellSpan1(Rectangle[][] ColumnWiseRect, Rectangle wholeRectangle, int[][] cellSpan, int numberofRows, int numberOfColumns)
             throws IOException, CryptographyException {
         StringBuffer sb = new StringBuffer();
 
-        sb.append("<table border = \"0px\" style=\"border-collapse:collapse; border :black; border-width: 1px; width :100%;margin-left:").append(getMarginPosition()).append(";\">");
+//        sb.append("<table border = \"0px\" style=\"border-collapse:collapse; border :black; border-width: 1px; width :100%;margin-left:").append(getMarginPosition()).append("px;\">");
+        sb.append("<table border = \"0px\" style=\"border-collapse:collapse; border :black; border-width: 1px; width :100%;margin-left:").append("0").append("px;\">");
         List<TextPosition> tempList = new ArrayList<>();
         for (int i = 0; i < numberofRows; i++) {
 //        sb.append("<tr>");
