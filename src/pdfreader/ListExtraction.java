@@ -165,19 +165,19 @@ public class ListExtraction {
         else{
             switch (2) { // change 2 to alignment inside switch
                 case 2:
-                    this.align = "</p><p style=\"text-align:justify;";
+                    this.align = "</font></p><p style=\"text-align:justify;";
                     break;
                 case 0:
-                    this.align = "</p><p style=\"text-align:left;";
+                    this.align = "</font></p><p style=\"text-align:left;";
                     break;
                 case 1:
-                    this.align = "</p><p style=\"text-align:right;";
+                    this.align = "</font></p><p style=\"text-align:right;";
                     break;
                 case 3:
-                    this.align = "</p><p style=\"text-align:center;";
+                    this.align = "</font></p><p style=\"text-align:center;";
                     break;
                 default:
-                    this.align = "</p><p style=\"text-align:left;";
+                    this.align = "</font></p><p style=\"text-align:left;";
             }
         }
         String closeBoldTag = "";
@@ -193,7 +193,7 @@ public class ListExtraction {
         this.sbForParagraph.append(this.align).append(this.tempForParagraph);
         this.tempForParagraph = new StringBuffer();
 //        return this.sbForParagraph.append(closeItalicTag).append(closeBoldTag).append("</p></div>");
-        return this.sbForParagraph.append(closeItalicTag).append(closeBoldTag).append("</p>");
+        return this.sbForParagraph.append(closeItalicTag).append(closeBoldTag).append("</font></p>");
     }
 
     private boolean matchPattern(String texts) {
@@ -246,7 +246,7 @@ public class ListExtraction {
                         this.sbForParagraph.append("</i>");
                         this.lastWasItalic = true;
                     }
-                    this.sbForParagraph.append("</p>\n");
+                    this.sbForParagraph.append("</font></p>\n");
                     this.paragraphcheck = true;
                 } else {
                     this.currentParagraph.append(this.currentLine.toString()).append(" ");
@@ -289,7 +289,7 @@ public class ListExtraction {
                             this.sbForParagraph.append("</i>");
                             this.lastWasItalic = true;
                         }
-                        this.sbForParagraph.append("</p>\n");
+                        this.sbForParagraph.append("</font></p>\n");
                         this.paragraphcheck = true;
                     } else {
                         this.currentParagraph.append(this.currentLine.toString()).append(" ");
@@ -427,7 +427,7 @@ public class ListExtraction {
                     this.htmlFile.write("\">");
                     this.htmlFile.write(this.currentLine.toString());
 
-                    this.htmlFile.write("</p>\n");
+                    this.htmlFile.write("</font></p>\n");
                 }
             }
 
@@ -460,7 +460,7 @@ public class ListExtraction {
                     this.htmlFile.write("\">");
                     this.htmlFile.write(this.currentLine.toString());
 
-                    this.htmlFile.write("</p>\n");
+                    this.htmlFile.write("</font></p>\n");
                 }
                 this.numberSpace = 0;
                 this.sizeAllSpace = 0;
@@ -561,19 +561,19 @@ public class ListExtraction {
                 } else {
                     switch (2) { // change 2 to alignment inside switch
                         case 2:
-                            this.align = "</p><p style=\"text-align:justify;";
+                            this.align = "</font></p><p style=\"text-align:justify;";
                             break;
                         case 0:
-                            this.align = "</p><p style=\"text-align:left;";
+                            this.align = "</font></p><p style=\"text-align:left;";
                             break;
                         case 1:
-                            this.align = "</p><p style=\"text-align:right;";
+                            this.align = "</font></p><p style=\"text-align:right;";
                             break;
                         case 3:
-                            this.align = "</p><p style=\"text-align:center;";
+                            this.align = "</font></p><p style=\"text-align:center;";
                             break;
                         default:
-                            this.align = "</p><p style=\"text-align:left;";
+                            this.align = "</font></p><p style=\"text-align:left;";
                     }
                 }
                 String closeBoldTag = "";
@@ -647,7 +647,7 @@ public class ListExtraction {
     public void appendCharacter(TextPosition text) {
         int charInDecimal = text.getCharacter().toCharArray()[0];
 //    System.out.println("Character: "+text.getCharacter()+" ; decimal value: "+charInDecimal);
-        if (charInDecimal > 255) {
+        if (charInDecimal > 127) {
             if (charInDecimal == 8213) {
                 this.currentLineofParagraph.append("&#").append(8220).append(";");
                 this.tempForParagraph.append("&#").append(8220).append(";");
@@ -657,6 +657,7 @@ public class ListExtraction {
             } else if (charInDecimal == 61623) {
                 this.currentLineofParagraph.append("&bull").append(";");
                 this.tempForParagraph.append("&bull").append(";");
+            } else if (charInDecimal == 167) {
             } else {
                 this.currentLineofParagraph.append("&#").append(charInDecimal).append(";");
                 this.tempForParagraph.append("&#").append(charInDecimal).append(";");
@@ -672,7 +673,6 @@ public class ListExtraction {
             } else if (charInDecimal == 3) {
                 this.tempForParagraph.append("&#32;");
                 this.currentLineofParagraph.append("&#32;");
-            } else if (charInDecimal == 167) {
             } else if (charInDecimal == 1) {
                 this.tempForParagraph.append("&#35").append(";");
             } else {
@@ -925,19 +925,19 @@ public class ListExtraction {
                     this.sbForParagraph.append(closeItalicTag).append(closeBoldTag);
                     switch (2) { // change 2 to alignment inside switch
                         case 2:
-                            this.align = "</p><p style=\"text-align:justify;";
+                            this.align = "</font></p><p style=\"text-align:justify;";
                             break;
                         case 0:
-                            this.align = "</p><p style=\"text-align:left;";
+                            this.align = "</font></p><p style=\"text-align:left;";
                             break;
                         case 1:
-                            this.align = "</p><p style=\"text-align:right;";
+                            this.align = "</font></p><p style=\"text-align:right;";
                             break;
                         case 3:
-                            this.align = "</p><p style=\"text-align:center;";
+                            this.align = "</font></p><p style=\"text-align:center;";
                             break;
                         default:
-                            this.align = "</p><p style=\"text-align:left;";
+                            this.align = "</font></p><p style=\"text-align:left;";
                     }
                 }
                 this.sbForParagraph.append(this.align).append(this.tempForParagraph);
